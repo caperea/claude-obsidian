@@ -1,164 +1,194 @@
 ---
 name: wiki-query
-description: "Answer questions using the Obsidian wiki vault. Reads hot cache first, then index, then relevant pages. Synthesizes answers with citations. Files good answers back as wiki pages. Supports quick, standard, and deep modes. Triggers on: what do you know about, query:, what is, explain, summarize, find in wiki, search the wiki, based on the wiki, wiki query quick, wiki query deep."
+description: "基于Obsidian wiki知识库回答问题。先读热缓存，再读索引，再读相关页面。综合回答并标注来源。好的回答沉淀为wiki页。支持快速、标准、深度三种模式。触发词：what do you know about, query:, what is, explain, summarize, find in wiki, search the wiki, based on the wiki, wiki query quick, wiki query deep, 查一下, 关于, 解释, wiki查询。"
 allowed-tools: Read Glob Grep
 ---
 
-# wiki-query: Query the Wiki
+# wiki-query：知识库查询
 
-The wiki has already done the synthesis work. Read strategically, answer precisely, and file good answers back so the knowledge compounds.
+wiki已经完成了综合提炼工作。策略性地读取，精确地回答，好的回答沉淀回去，让知识持续积累。
 
----
+**权限：** `wiki/`可自由读写，其他目录只读。
 
-## Query Modes
-
-Three depths. Choose based on the question complexity.
-
-| Mode | Trigger | Reads | Token cost | Best for |
-|------|---------|-------|------------|---------|
-| **Quick** | `query quick: ...` or simple factual Q | hot.md + index.md only | ~1,500 | "What is X?", date lookups, quick facts |
-| **Standard** | default (no flag) | hot.md + index + 3-5 pages | ~3,000 | Most questions |
-| **Deep** | `query deep: ...` or "thorough", "comprehensive" | Full wiki + optional web | ~8,000+ | "Compare A vs B across everything", synthesis, gap analysis |
+**写作规范：** 全中文，中西文之间不加空格。
 
 ---
 
-## Quick Mode
+## 查询模式
 
-Use when the answer is likely in the hot cache or index summary.
+三种深度，按问题复杂度选择。
 
-1. Read `wiki/hot.md`. If it answers the question, respond immediately.
-2. If not, read `wiki/index.md`. Scan descriptions for the answer.
-3. If found in index summary, respond and do not open any pages.
-4. If not found, say "Not in quick cache. Run as standard query?"
-
-Do not open individual wiki pages in quick mode.
-
----
-
-## Standard Query Workflow
-
-1. **Read** `wiki/hot.md` first. It may already have the answer or directly relevant context.
-2. **Read** `wiki/index.md` to find the most relevant pages (scan for titles and descriptions).
-3. **Read** those pages. Follow wikilinks to depth-2 for key entities. No deeper.
-4. **Synthesize** the answer in chat. Cite sources with wikilinks: `(Source: [[Page Name]])`.
-5. **Offer to file** the answer: "This analysis seems worth keeping. Should I save it as `wiki/questions/answer-name.md`?"
-6. If the question reveals a **gap**: say "I don't have enough on X. Want to find a source?"
+| 模式 | 触发 | 读取范围 | Token开销 | 适用场景 |
+|------|------|----------|-----------|----------|
+| **快速** | `query quick: ...`或简单事实问题 | hot.md + index.md | ~1,500 | "某人是谁？"、时间查询、快速事实 |
+| **标准** | 默认（无标记） | hot.md + index + 3-5页 | ~3,000 | 大多数问题 |
+| **深度** | `query deep: ...`或"彻底"、"全面" | 全wiki + 可选网络搜索 | ~8,000+ | "对比A和B"、跨领域综合、缺口分析 |
 
 ---
 
-## Deep Mode
+## 快速模式
 
-Use for synthesis questions, comparisons, or "tell me everything about X."
+答案很可能在热缓存或索引摘要中时使用。
 
-1. Read `wiki/hot.md` and `wiki/index.md`.
-2. Identify all relevant sections (concepts, entities, sources, comparisons).
-3. Read every relevant page. No skipping.
-4. If wiki coverage is thin, offer to supplement with web search.
-5. Synthesize a comprehensive answer with full citations.
-6. Always file the result back as a wiki page. Deep answers are too valuable to lose.
+1. 读`wiki/hot.md`。如果能回答，立即回复。
+2. 如果不行，读`wiki/index.md`。扫描描述寻找答案。
+3. 如果在索引摘要中找到，直接回复，不打开任何页面。
+4. 如果找不到，说"快速缓存中没有。要按标准模式查询吗？"
 
----
-
-## Token Discipline
-
-Read the minimum needed:
-
-| Start with | Cost (approx) | When to stop |
-|------------|---------------|--------------|
-| hot.md | ~500 tokens | If it has the answer |
-| index.md | ~1000 tokens | If you can identify 3-5 relevant pages |
-| 3-5 wiki pages | ~300 tokens each | Usually sufficient |
-| 10+ wiki pages | expensive | Only for synthesis across the entire wiki |
-
-If hot.md has the answer, respond without reading further.
+快速模式下不打开具体wiki页面。
 
 ---
 
-## Index Format Reference
+## 标准查询流程
 
-The master index (`wiki/index.md`) looks like:
+1. **读**`wiki/hot.md`。可能已经有答案或直接相关的上下文。
+2. **读**`wiki/index.md`，找到最相关的页面（扫描标题和描述）。
+3. **读**那些页面。沿wikilink追踪到深度2的关键实体，不再深入。
+4. **综合**回答。用wikilink标注来源：`（来源：[[页面名]]）`。
+5. **提议沉淀**："这个分析值得保留。要保存到`wiki/概念/回答名.md`吗？"
+6. 如果问题暴露了**缺口**：说"关于X的信息不足。要找资料补充吗？"
+
+---
+
+## 深度模式
+
+用于综合性问题、对比分析，或"关于X，告诉我所有信息"。
+
+1. 读`wiki/hot.md`和`wiki/index.md`。
+2. 识别所有相关板块（概念、人物、组织、项目、系统、业务等）。
+3. 读所有相关页面，不跳过。
+4. 如果wiki覆盖不够，提议用网络搜索补充。
+5. 综合全面回答，完整标注来源。
+6. 深度回答必须沉淀为wiki页，太有价值不能丢在对话里。
+
+---
+
+## Token纪律
+
+读最少够用的内容：
+
+| 起步读取 | 开销（约） | 何时停止 |
+|----------|------------|----------|
+| hot.md | ~500 tokens | 如果已有答案 |
+| index.md | ~1000 tokens | 如果能定位3-5个相关页面 |
+| 3-5个wiki页 | 每页~300 tokens | 通常够用 |
+| 10+个wiki页 | 开销大 | 仅限全wiki综合分析 |
+
+如果hot.md已有答案，不再继续读取。
+
+---
+
+## 索引格式参考
+
+主索引（`wiki/index.md`）结构：
 
 ```markdown
-## Domains
-- [[Domain Name]]: description (N sources)
+## 人物
+- [[人名]]：角色/职位（来源：[[笔记]]）
 
-## Entities
-- [[Entity Name]]: role (first: [[Source]])
+## 组织
+- [[团队名]]：职能描述（N个成员）
 
-## Concepts
-- [[Concept Name]]: definition (status: developing)
+## 项目
+- [[项目名]]：目标、状态
 
-## Sources
-- [[Source Title]]: author, date, type
+## 系统
+- [[系统名]]：功能描述、归属
 
-## Questions
-- [[Question Title]]: answer summary
+## 业务
+- [[业务名]]：业务板块概述
+
+## 概念
+- [[概念名]]：定义（状态：developing）
+
+## 事件
+- [[事件名]]：时间、影响
+
+## 决策
+- [[决策名]]：日期、结论
+
+## 目标
+- [[目标名]]：周期、当前进度
+
+## 流程
+- [[流程名]]：触发条件、Owner
 ```
 
-Scan the section headers first to determine which sections to read.
+先扫描分区标题，判断需要读哪些分区。
 
 ---
 
-## Domain Sub-Index Format
+## 子目录索引格式
 
-Each domain folder has a `_index.md` for focused lookups:
+每个子目录有`_index.md`用于聚焦查询：
 
 ```markdown
 ---
 type: meta
-title: "Entities Index"
+title: "人物索引"
 updated: YYYY-MM-DD
 ---
-# Entities
+# 人物
 
-## People
-- [[Person Name]]: role, org
+## 管理层
+- [[人名]]：职位、团队
 
-## Organizations
-- [[Org Name]]: what they do
+## 关键成员
+- [[人名]]：角色、方向
 
-## Products
-- [[Product Name]]: category
+## 候选人
+- [[人名]]：来源、状态
 ```
 
-Use sub-indexes when the question is scoped to one domain. Avoid reading the full master index for narrow queries.
+当问题范围明确时用子索引，避免为窄查询读取完整主索引。
 
 ---
 
-## Filing Answers Back
+## 回答沉淀
 
-Good answers compound into the wiki. Don't let insights disappear into chat history.
+好的回答沉淀为wiki页，不让洞见消失在对话历史里。
 
-When filing an answer:
+沉淀时使用以下frontmatter：
 
 ```yaml
 ---
-type: question
-title: "Short descriptive title"
-question: "The exact query as asked."
+type: 问答
+title: "简短描述性标题"
+question: "原始问题。"
 answer_quality: solid
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-tags: [question, <domain>]
+tags: [问答, <方向>]
 related:
-  - "[[Page referenced in answer]]"
-sources:
-  - "[[wiki/sources/relevant-source.md]]"
+  - "[[回答中引用的页面]]"
 status: developing
 ---
 ```
 
-Then write the answer as the page body. Include citations. Link every mentioned concept or entity.
+然后正文写回答内容。标注来源，链接所有提及的概念和实体。
 
-After filing, add an entry to `wiki/index.md` under Questions and append to `wiki/log.md`.
+沉淀后，在`wiki/index.md`相应分区追加条目，在`wiki/log.md`追加记录。
+
+根据回答内容选择存放目录：
+- 关于人的回答 → `wiki/人物/`
+- 关于组织/团队的回答 → `wiki/组织/`
+- 关于项目的回答 → `wiki/项目/`
+- 关于系统的回答 → `wiki/系统/`
+- 关于业务的回答 → `wiki/业务/`
+- 关于概念/框架/流程的回答 → `wiki/概念/`
+- 关于事件的回答 → `wiki/事件/`
+- 关于决策/选型/取舍的回答 → `wiki/决策/`
+- 关于目标/指标/KPI的回答 → `wiki/目标/`
+- 关于流程/Runbook的回答 → `wiki/流程/`
+- 跨领域综合分析 → `wiki/概念/`
 
 ---
 
-## Gap Handling
+## 缺口处理
 
-If the question cannot be answered from the wiki:
+如果wiki无法回答问题：
 
-1. Say clearly: "I don't have enough in the wiki to answer this well."
-2. Identify the specific gap: "I have nothing on [subtopic]."
-3. Suggest: "Want to find a source on this? I can help you search or process one."
-4. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki.
+1. 明确说："wiki中关于这个问题的信息不足。"
+2. 指出具体缺口："关于[子话题]没有任何记录。"
+3. 建议："要找资料补充吗？我可以帮你搜索或处理相关材料。"
+4. 不编造，不用训练数据回答wiki领域内的具体问题。

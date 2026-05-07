@@ -1,64 +1,43 @@
-# claude-obsidian — Claude + Obsidian Wiki Vault
+# claude-obsidian — 工作知识Wiki
 
-This folder is both a Claude Code plugin and an Obsidian vault.
+这是一个Claude Code插件，为Obsidian vault提供持续积累的知识wiki系统。
 
-**Plugin name:** `claude-obsidian`
-**Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`
-**Vault path:** This directory (open in Obsidian directly)
+**插件名称：** `claude-obsidian`
+**Skills：** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/save`, `/autoresearch`, `/canvas`
 
-## What This Vault Is For
-
-This vault demonstrates the LLM Wiki pattern — a persistent, compounding knowledge base for Claude + Obsidian. Drop any source, ask any question, and the wiki grows richer with every session.
-
-## Vault Structure
+## Vault结构
 
 ```
-.raw/           source documents — immutable, Claude reads but never modifies
-wiki/           Claude-generated knowledge base
-_templates/     Obsidian Templater templates
-_attachments/   images and PDFs referenced by wiki pages
+vault根目录/
+├── 0-9各目录/     源文件——只读，不得修改
+├── wiki/          LLM生成的知识wiki——可自由读写
+└── _templates/    Obsidian Templater模板
 ```
 
-## How to Use
+## 使用方式
 
-Drop a source file into `.raw/`, then tell Claude: "ingest [filename]".
+- 指定一个源文件，让Claude摄入：`ingest 班子建设追踪.md`
+- 提问：Claude先读索引，再深入相关页面
+- 巡检：`lint the wiki`，每10-15次摄入后运行一次
 
-Ask any question. Claude reads the index first, then drills into relevant pages.
+## Wiki子目录
 
-Run `/wiki` to scaffold a new vault or check setup status.
+| 目录 | 内容 |
+|------|------|
+| `wiki/人物/` | 团队成员、候选人、stakeholder画像 |
+| `wiki/组织/` | 团队结构、能力分布、资源配置 |
+| `wiki/项目/` | 在跑的项目、专项、OKR追踪 |
+| `wiki/系统/` | 技术系统、架构、依赖关系 |
+| `wiki/业务/` | 安全/治理业务领域知识 |
+| `wiki/概念/` | 技术框架、管理方法论 |
+| `wiki/事件/` | 线上故障、复盘、关键事件 |
+| `wiki/决策/` | 技术选型、组织调整、优先级取舍 |
+| `wiki/目标/` | OKR、关键指标、里程碑 |
+| `wiki/流程/` | Runbook、审批链路、应急响应 |
+| `wiki/meta/` | lint报告、dashboard |
 
-Run "lint the wiki" every 10-15 ingests to catch orphans and gaps.
+## 权限规则
 
-## Cross-Project Access
-
-To reference this wiki from another Claude Code project, add to that project's CLAUDE.md:
-
-```markdown
-## Wiki Knowledge Base
-Path: /path/to/this/vault
-
-When you need context not already in this project:
-1. Read wiki/hot.md first (recent context, ~500 words)
-2. If not enough, read wiki/index.md
-3. If you need domain specifics, read wiki/<domain>/_index.md
-4. Only then read individual wiki pages
-
-Do NOT read the wiki for general coding questions or things already in this project.
-```
-
-## Plugin Skills
-
-| Skill | Trigger |
-|-------|---------|
-| `/wiki` | Setup, scaffold, route to sub-skills |
-| `ingest [source]` | Single or batch source ingestion |
-| `query: [question]` | Answer from wiki content |
-| `lint the wiki` | Health check |
-| `/save` | File the current conversation as a structured wiki note |
-| `/autoresearch [topic]` | Autonomous research loop: search, fetch, synthesize, file |
-| `/canvas` | Visual layer: add images, PDFs, notes to Obsidian canvas |
-
-## MCP (Optional)
-
-If you configured the MCP server, Claude can read and write vault notes directly.
-See `skills/wiki/references/mcp-setup.md` for setup instructions.
+- `wiki/`目录：LLM拥有完全读写权限
+- 其他所有目录：只读，不得修改源文件
+- 中西文之间不加空格

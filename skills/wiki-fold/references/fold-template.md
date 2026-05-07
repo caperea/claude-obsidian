@@ -9,9 +9,8 @@ Canonical output format for `wiki-fold`. Every fold page uses this layout exactl
 ```yaml
 ---
 type: fold
-title: "Fold k{K} — {EARLIEST-DATE} to {LATEST-DATE} — n{COUNT}"
-fold_id: "fold-k{K}-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}"
-batch_exponent: {K}
+title: "Fold — {EARLIEST-DATE}至{LATEST-DATE} — {COUNT}条"
+fold_id: "fold-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}"
 entry_count: {COUNT}
 entry_range:
   from: "{EARLIEST-CHILD-DATE}"
@@ -21,17 +20,15 @@ updated: "{YYYY-MM-DD}"
 tags:
   - meta
   - fold
-  - "fold/k{K}"
-status: mature
+status: 成熟
 children:
   - date: "{YYYY-MM-DD}"
     op: "{save|ingest|fold|session|setup|decision}"
-    title: "{log entry title verbatim}"
-    page: "[[{canonical page wikilink}]]"
+    title: "{log条目标题原文}"
+    page: "[[{对应wiki页面}]]"
     page_missing: false
-  # ... one record per log entry. No dedupe by page.
+  # 每条log记录一条，不按页面去重
 related:
-  - "[[DragonScale Memory]]"
   - "[[log]]"
   - "[[index]]"
 ---
@@ -43,10 +40,10 @@ All fields are required. Missing any field is a dry-run failure. `title` does no
 
 ## Body Sections (in order, all required)
 
-### 1. Scope (one paragraph)
+### 1. 范围（一段话）
 
 ```markdown
-Level-{K} fold of {COUNT} log entries spanning {FROM} to {TO}. Dominant themes: {THEME-1}, {THEME-2}, {THEME-3}.
+归档{COUNT}条log记录，时间跨度{FROM}至{TO}。主要主题：{THEME-1}、{THEME-2}、{THEME-3}。
 ```
 
 ### 2. Child Entries

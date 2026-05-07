@@ -90,124 +90,142 @@ Max rounds: 3 (as set in program.md). Stop when depth is reached or max rounds h
 
 ---
 
-## Filing Results
+## 归档结果
 
-After research is complete, create these pages:
+研究完成后，创建以下页面：
 
-**wiki/sources/**. One page per major reference found
-- Use source frontmatter (type, source_type, author, date_published, url, confidence, key_claims)
-- Body: summary of the source, what it contributes to the topic
+**wiki/概念/**。每个有价值的概念一个页面
+- 概念必须足够独立才值得单独建页
+- 先查index：更新已有概念页，不要重复创建
+- frontmatter使用type: 概念
 
-**wiki/concepts/**. One page per significant concept extracted
-- Only create a page if the concept is substantive enough to stand alone
-- Check the index first: update existing concept pages rather than creating duplicates
+**wiki/人物/**。研究中发现的关键人物
+- 先查index：更新已有人物页
 
-**wiki/entities/**. One page per significant person, org, or product identified
-- Check the index first: update existing entity pages
+**wiki/组织/**。研究中发现的关键组织/公司
+- 先查index：更新已有组织页
 
-**wiki/questions/**. One synthesis page titled "Research: [Topic]"
-- This is the master synthesis. Everything comes together here.
-- Sections: Overview, Key Findings, Entities, Concepts, Contradictions, Open Questions, Sources
-- Full frontmatter with related links to all pages created in this session
+**wiki/系统/**。研究中发现的技术系统/产品
+- 先查index：更新已有系统页
+
+**wiki/决策/**。研究中发现的决策记录（技术选型、架构取舍）
+- 有明确的选项对比和结论才建页
+
+**wiki/目标/**。研究中发现的指标定义、KPI、目标体系
+- 有量化定义和计算口径才建页
+
+**wiki/流程/**。研究中发现的操作流程、Runbook、审批链路
+- 有明确步骤和触发条件才建页
+
+**wiki/概念/研究-[主题].md**。综合分析主页
+- 这是主综合页，所有发现汇聚于此
+- 章节：概览、关键发现、相关实体、核心概念、矛盾点、开放问题、来源
+- 完整frontmatter，related字段链接本次创建的所有页面
+- frontmatter中用`sources`列表记录所有网络来源（url、作者、日期）
 
 ---
 
-## Synthesis Page Structure
+## 综合页结构
 
 ```markdown
 ---
-type: synthesis
-title: "Research: [Topic]"
+type: 概念
+title: "研究：[主题]"
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags:
-  - research
-  - [topic-tag]
-status: developing
+  - 研究
+  - [主题标签]
+status: 发展中
 related:
-  - "[[Every page created in this session]]"
-sources:
-  - "[[wiki/sources/Source 1]]"
-  - "[[wiki/sources/Source 2]]"
+  - "[[本次创建的每个页面]]"
+web_sources:
+  - url: "https://example.com/article"
+    author: "作者名"
+    date: "2026-01-15"
+    confidence: 高
+  - url: "https://example.com/another"
+    author: "作者名"
+    date: "2025-12-01"
+    confidence: 中
 ---
 
-# Research: [Topic]
+# 研究：[主题]
 
-## Overview
-[2-3 sentence summary of what was found]
+## 概览
+[2-3句话概括发现]
 
-## Key Findings
-- Finding 1 (Source: [[Source Page]])
-- Finding 2 (Source: [[Source Page]])
-- ...
+## 关键发现
+- 发现1（来源：[URL或页面]）
+- 发现2（来源：[URL或页面]）
 
-## Key Entities
-- [[Entity Name]]: role/significance
+## 相关实体
+- [[实体名]]：角色/意义
 
-## Key Concepts
-- [[Concept Name]]: one-line definition
+## 核心概念
+- [[概念名]]：一句话定义
 
-## Contradictions
-- [[Source A]] says X. [[Source B]] says Y. [Brief note on which is more credible and why]
+## 矛盾点
+- 来源A说X，来源B说Y。[哪个更可信及原因]
 
-## Open Questions
-- [Question that research didn't fully answer]
-- [Gap that needs more sources]
+## 开放问题
+- [研究未完全回答的问题]
+- [需要更多来源的缺口]
 
-## Sources
-- [[Source 1]]: author, date
-- [[Source 2]]: author, date
+## 来源列表
+- [来源1]：作者，日期，URL
+- [来源2]：作者，日期，URL
 ```
 
 ---
 
-## After Filing
+## 归档后
 
-1. Update `wiki/index.md`. Add all new pages to the right sections
-2. Append to `wiki/log.md` (at the TOP):
+1. 更新`wiki/index.md`，把所有新页面添加到对应分区。
+2. 在`wiki/log.md`顶部追加：
    ```
-   ## [YYYY-MM-DD] autoresearch | [Topic]
-   - Rounds: N
-   - Sources found: N
-   - Pages created: [[Page 1]], [[Page 2]], ...
-   - Synthesis: [[Research: Topic]]
-   - Key finding: [one sentence]
+   ## [YYYY-MM-DD] autoresearch | [主题]
+   - 轮次：N
+   - 网络来源：N个
+   - 新建页面：[[页面1]]、[[页面2]]...
+   - 综合页：[[研究：主题]]
+   - 关键发现：一句话
    ```
-3. Update `wiki/hot.md` with the research summary
+3. 更新`wiki/hot.md`。
 
 ---
 
-## Report to User
+## 向用户汇报
 
-After filing everything:
+归档完成后：
 
 ```
-Research complete: [Topic]
+研究完成：[主题]
 
-Rounds: N | Searches: N | Pages created: N
+轮次：N | 搜索：N次 | 新建页面：N个
 
-Created:
-  wiki/questions/Research: [Topic].md (synthesis)
-  wiki/sources/[Source 1].md
-  wiki/concepts/[Concept 1].md
-  wiki/entities/[Entity 1].md
+创建：
+  wiki/概念/研究-[主题].md（综合页）
+  wiki/概念/[概念1].md
+  wiki/人物/[人物1].md
+  wiki/系统/[系统1].md
 
-Key findings:
-- [Finding 1]
-- [Finding 2]
-- [Finding 3]
+关键发现：
+- [发现1]
+- [发现2]
+- [发现3]
 
-Open questions filed: N
+开放问题：N个
 ```
 
 ---
 
-## Constraints
+## 约束
 
-Follow the limits in `references/program.md`:
-- Max rounds (default: 3)
-- Max pages per session (default: 15)
-- Confidence scoring rules
-- Source preference rules
+遵守`references/program.md`中的限制：
+- 最大轮次（默认：3）
+- 每次最多页面数（默认：15）
+- 置信度评分规则
+- 来源偏好规则
 
-If a constraint conflicts with completeness, respect the constraint and note what was left out in the Open Questions section.
+当约束与完整性冲突时，尊重约束，在开放问题章节说明遗漏了什么。

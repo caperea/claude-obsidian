@@ -1,70 +1,19 @@
 ---
-type: overview
-title: "Wiki Overview"
-created: 2026-04-07
-updated: 2026-04-07
-tags:
-  - meta
-  - overview
-status: developing
-related:
-  - "[[index]]"
-  - "[[hot]]"
-  - "[[log]]"
-  - "[[dashboard]]"
-  - "[[LLM Wiki Pattern]]"
-sources:
+type: meta
+title: Wiki概述
+updated: 2026-05-06
 ---
 
-# Wiki Overview
+# Wiki概述
 
-Navigation: [[index]] | [[hot]] | [[log]] | [[dashboard]]
+> 这是滴滴网约车安全治理方向的工作知识wiki。从日常笔记、会议纪要、工作计划中提炼综合知识，建立交叉引用，形成持续积累的知识底座。
 
----
+## 覆盖范围
 
-## Purpose
-
-This is the claude-obsidian demo vault. It demonstrates the [[LLM Wiki Pattern]] — a system for building persistent, compounding knowledge bases using Claude and Obsidian.
-
-Run `/wiki` to scaffold this vault for your own domain and replace this overview.
-
----
-
-## Current Seed Content
-
-
-**Concepts seeded:**
-- [[LLM Wiki Pattern]] — the core architecture
-- [[Hot Cache]] — session context mechanism
-- [[Compounding Knowledge]] — why the pattern works
-
-**Entities seeded:**
-- [[Andrej Karpathy]] — originated the pattern
-
-**Sources seeded:**
-- [[claude-obsidian-ecosystem-research]] — 16+ projects, 13 cherry-picks identified (2026-04-08)
-
----
-
-## Current State
-
-- Sources ingested: 2
-- Wiki pages: 26
-- Last activity: 2026-04-08 (v1.4.1 shipped, release session filed)
-
----
-
-## Canvases
-
-- [[claude-obsidian-presentation]] — Full presentation: hero, overview, skills, architecture, Wiki vs RAG, visual demos (2026-04-07)
-- [[AI Marketing Hub Cover Images Canvas]] — Cover image library for AI Marketing Hub brand assets
-
----
-
-## Key Themes
-
-**Knowledge compounds.** Unlike RAG, the wiki pre-compiles synthesis. Cross-references are already there. Contradictions are flagged. Every ingest enriches existing pages rather than adding isolated chunks.
-
-**The hot cache is the force multiplier.** A ~500-word file captures recent context. New sessions start with full context at minimal token cost.
-
-**Obsidian is the IDE, Claude is the programmer.** The graph view shows what's connected. The human curates sources and asks questions. Claude writes and maintains everything else.
+- **人物**：团队成员画像、候选人评估、关键stakeholder
+- **组织**：团队结构、能力分布、资源配置
+- **项目**：在跑的项目和专项追踪
+- **系统**：技术系统架构和依赖关系
+- **业务**：安全/治理业务领域知识
+- **概念**：技术框架和管理方法论
+- **事件**：线上故障和关键事件复盘

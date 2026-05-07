@@ -1,62 +1,33 @@
 # claude-obsidian: Agent Instructions
 
-This repo is a Claude Code plugin **and** an Obsidian vault that builds persistent, compounding knowledge bases using Andrej Karpathy's LLM Wiki pattern. It works with **any AI coding agent** that supports the Agent Skills standard, including Codex CLI, OpenCode, and similar.
+这是一个Claude Code插件，为Obsidian vault提供持续积累的知识wiki系统。基于Karpathy的LLM Wiki模式。
 
-Originally built for Claude Code, the skills follow the cross-platform Agent Skills spec. Newer skills (`wiki-fold`, `wiki-ingest`, `wiki-lint`) use only `name` and `description` frontmatter (kepano convention). Some older skills still carry an optional `allowed-tools` field for Claude Code compatibility; cross-platform agents that do not recognize it should ignore it.
+## Skills
 
-## Skills Discovery
-
-All skills live in `skills/<name>/SKILL.md`. Codex / OpenCode / other Agent Skills compatible agents will auto-discover them when you symlink the directory:
-
-```bash
-# Codex CLI
-ln -s "$(pwd)/skills" ~/.codex/skills/claude-obsidian
-
-# OpenCode
-ln -s "$(pwd)/skills" ~/.opencode/skills/claude-obsidian
-```
-
-Or run the bundled installer:
-
-```bash
-bash bin/setup-multi-agent.sh
-```
-
-## Available Skills
-
-| Skill | Trigger phrases |
+| Skill | 触发方式 |
 |---|---|
-| `wiki` | `/wiki`, set up wiki, scaffold vault |
-| `wiki-ingest` | ingest, ingest this url, ingest this image, batch ingest |
-| `wiki-query` | query, what do you know about, query quick:, query deep: |
-| `wiki-lint` | lint the wiki, health check, find orphans |
-| `wiki-fold` | fold the log, run a fold, log rollup (DragonScale Mechanism 1, opt-in) |
-| `save` | /save, file this conversation |
-| `autoresearch` | autoresearch, autonomous research loop |
-| `canvas` | /canvas, add to canvas, create canvas |
-| `defuddle` | clean this url, defuddle |
-| `obsidian-markdown` | obsidian syntax, wikilink, callout |
-| `obsidian-bases` | obsidian bases, .base file, dynamic table |
+| `wiki` | `/wiki`，wiki状态检查 |
+| `wiki-ingest` | ingest，摄入笔记到wiki |
+| `wiki-query` | query，从wiki中检索信息 |
+| `wiki-lint` | lint the wiki，健康检查 |
+| `wiki-fold` | fold the log，日志rollup |
+| `save` | /save，保存对话到wiki |
+| `autoresearch` | autoresearch，自主研究 |
+| `canvas` | /canvas，可视化画布 |
+| `defuddle` | defuddle，网页内容清洁 |
+| `obsidian-markdown` | Obsidian Markdown语法参考 |
+| `obsidian-bases` | Obsidian Bases参考 |
 
-## Key Conventions
+## 核心约定
 
-- **Vault root**: the directory containing `wiki/` and `.raw/`
-- **Hot cache**: `wiki/hot.md` (read at session start, updated at session end)
-- **Source documents**: `.raw/` (immutable: agents never modify these)
-- **Generated knowledge**: `wiki/` (agent-owned, links to sources via wikilinks)
-- **Manifest**: `.raw/.manifest.json` tracks ingested sources (delta tracking)
+- **源文件**：vault中除`wiki/`外的所有目录——只读，不得修改
+- **wiki**：`wiki/`目录——LLM可自由读写
+- **热缓存**：`wiki/hot.md`（会话开始时读取，结束时更新）
+- **wiki子目录**：人物/、组织/、项目/、系统/、业务/、概念/、事件/、决策/、目标/、流程/、meta/
+- **语言**：中文，中西文之间不加空格
 
-## Bootstrap
+## 启动流程
 
-When the user opens this project for the first time:
-
-1. Read this file (`AGENTS.md`) and the project `CLAUDE.md` for full context
-2. Read `skills/wiki/SKILL.md` for the orchestration pattern
-3. If `wiki/hot.md` exists, read it silently to restore recent context
-4. If the user types `/wiki` (or "set up wiki"), follow the wiki skill's scaffold workflow
-
-## Reference
-
-- Plugin homepage: https://github.com/AgriciDaniel/claude-obsidian
-- Pattern source: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- Cross-reference: https://github.com/kepano/obsidian-skills (authoritative Obsidian-specific skills)
+1. 读取本文件和`CLAUDE.md`
+2. 读取`skills/wiki/SKILL.md`了解路由逻辑
+3. 如果`wiki/hot.md`存在，读取以恢复最近上下文
